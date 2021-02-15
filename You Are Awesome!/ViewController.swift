@@ -14,7 +14,9 @@ class ViewController: UIViewController {
     
     var imageNumber = -1
     var messageNumber = -1
+    var soundNumber = -1
     var totalNumberOfImages = 9
+    let totalNumberOfSounds = 6
     var audioPlayer: AVAudioPlayer!
     
     override func viewDidLoad() {
@@ -22,6 +24,21 @@ class ViewController: UIViewController {
         
     }
     
+    func playSound(name: String){
+        
+        if let sound = NSDataAsset(name: name){
+            do{
+                try audioPlayer = AVAudioPlayer(data: sound.data)
+                audioPlayer.play()
+            } catch{
+                print ("\(error.localizedDescription)ERROR: Could not read data from file sound0")
+            }
+            
+        } else {
+            print ("ERROR: Could not read data from file sound0")
+        }
+        
+    }
     @IBAction func messageButtonPressed(_ sender: UIButton) {
         
         let messages = ["You Are Awesome!",
@@ -48,17 +65,15 @@ class ViewController: UIViewController {
         imageNumber = newImageNumber
         imageView.image = UIImage (named: "image\(imageNumber)")
         
-        if let sound = NSDataAsset(name: "sound0"){
-            do{
-                try audioPlayer = AVAudioPlayer(data: sound.data)
-                audioPlayer.play()
-            } catch{
-                print ("\(error.localizedDescription)ERROR: Could not read data from file sound0")
-            }
-            
-        } else {
-            print ("ERROR: Could not read data from file sound0")
-        }
+        var newSoundNumber: Int
+        
+        repeat {
+            newSoundNumber = Int.random(in:0...totalNumberOfSounds)
+        }   while soundNumber == newSoundNumber
+        soundNumber = newSoundNumber
+        print ("*** The New Sound Number is \(soundNumber)")
+        
+        playSound(name: "sound\(soundNumber)")
         
     }
     
